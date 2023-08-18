@@ -60,6 +60,7 @@ form .text-field {
     border: none;
     background: none;
     outline: none;
+    margin-top: 2.8rem;
 }
 
 .text-field ::placeholder {
@@ -84,7 +85,7 @@ form .text-field {
     font-weight: 300;
     cursor: pointer;
     outline: none;
-    margin-top: 2rem;
+    margin-top: 0.5rem;
     font-family: 'Poppins', sans-serif;
     letter-spacing: 2px;
 }
