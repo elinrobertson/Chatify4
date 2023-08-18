@@ -1,11 +1,11 @@
-import { PropsWithChildren, createContext, useContext, useState } from "react"
-import { io } from "socket.io-client"
+import { PropsWithChildren, createContext, useContext, useState, useEffect } from "react"
+import { io } from "socket.io-client";
 
 interface ISocketContext {
     isLoggedIn: boolean
     username: string
     room: string
-    SetRoom: React.Dispatch<React.SetStateAction<string>>
+    setRoom: React.Dispatch<React.SetStateAction<string>>
     setUsername: React.Dispatch<React.SetStateAction<string>>
     login: () => void   
 }
@@ -19,10 +19,8 @@ const defaultValues = {
     login: () => { }
 }
 
-const SocketContext = createContext<ISocketContext>(defaultValues)  // const SocketContext = createContext<ISocketContext>(null as any)
+const SocketContext = createContext<ISocketContext>(defaultValues)
 export const useSocket = () => useContext(SocketContext)
-//export const SocketContext = createContext<ISocketContext>(defaultValues)
-
 const socket = io("http://localhost:3001", { autoConnect: false} )
 
 
@@ -33,9 +31,16 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
 
     useEffect (() => {
         if (room) {
-            socket.emit("join_room", room)
+            socket.emit("join_room", {room, username})
         }
-    }, [room])
+    }, [room, username])
+
+    useEffect(() => {
+        socket.on("new_user_joined_chat", (username) => {
+            console.log(username);
+            
+        })
+    },[socket])
 
     const login = () => {
         socket.connect()
