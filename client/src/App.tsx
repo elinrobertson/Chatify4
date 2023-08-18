@@ -22,12 +22,12 @@ function App() {
    
       <div className="login-container">
       <h1>Chatify</h1>
-      <form method="post">
+      <div className="form-container">
       <div className="text-field">
         <input type="text" placeholder="Användarnamn"/>
       </div>
         <button onClick={initChat}>Börja chatta</button>
-      </form>
+      </div>
       </div>
   
     </>
