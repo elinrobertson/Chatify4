@@ -1,8 +1,8 @@
-import React from 'react'
+import "./Chat.css"
 
 function Chat() {
   return (
-    <div>Chat</div>
+    <div className="main">Chat</div>
   )
 }
 

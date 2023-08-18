@@ -3,7 +3,6 @@ import Chat from "./Chat";
 import Login from "./Login";
 
 
-
 function App() {
 
   const { isLoggedIn } = useSocket()
@@ -11,7 +10,7 @@ function App() {
   return (
     <div> 
       {isLoggedIn ? <Chat /> : <Login />}
-      </div>
+    </div>
   )
 }
 
