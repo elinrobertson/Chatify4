@@ -1,4 +1,5 @@
 import { PropsWithChildren, createContext, useContext, useState } from "react"
+import { io } from "socket.io-client"
 
 interface ISocketContext {
     isLoggedIn: boolean
@@ -11,8 +12,8 @@ interface ISocketContext {
 
 const defaultValues = {
     isLoggedIn: false,
-    username:"",
-    room:"",
+    username: "",
+    room: "",
     setRoom: () => { },
     setUsername: () => { },
     login: () => { }
@@ -25,7 +26,7 @@ export const useSocket = () => useContext(SocketContext)
 const socket = io("http://localhost:3001", { autoConnect: false} )
 
 
-const SocketProvider = ({children}: PropsWithChildren) => {
+const SocketProvider = ({ children }: PropsWithChildren) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState("");
     const [room, setRoom] = useState("");

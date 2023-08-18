@@ -8,22 +8,27 @@ const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
         origin: "*",
-        methods: ["GET", "POST"]
+        
     },
 });
 
 app.use(cors());
 
 io.on("connection", (socket) => {
-    console.log("New client connected: ", socket.id);
+    console.log("New user connected: ", socket.id);
 
     io.emit("test", "Testing, testing, 1,2,3")
 
     socket.on("init_chat", (username) => {
         socket.broadcast.emit("new_user_joined_chat", username);
     });
+
+    socket.on("join_room", (room) => {
+        socket.join(room);
+        console.log(io.sockets.adapter.rooms);
+    });
 });
 
 
 
-server.listen(3000, () => console.log("Server is up and running"));
+server.listen(3001, () => console.log("Server is up and running"));
