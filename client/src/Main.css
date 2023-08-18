@@ -41,12 +41,12 @@ body {
     
 }
 
-.login-container form {
+.login-container .form-container {
     padding: 40px 40px;
     box-sizing: border-box;
 }
 
-form .text-field {
+.form-container .text-field {
     position: relative;
     border-bottom: 1px solid #88dce4;
     margin: 30px 0;
