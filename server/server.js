@@ -26,6 +26,10 @@ io.on("connection", (socket) => {
         socket.broadcast.emit("new_user_joined_chat", username);
         console.log(io.sockets.adapter.rooms);
     });
+
+    socket.on("list_of_rooms", ({room, username}) => {
+        
+    })
 });
 
 

@@ -1,3 +1,4 @@
+// import { useSocket } from './SocketContext';
 import "./Chat.css"
 
 function Chat() {
@@ -5,6 +6,9 @@ function Chat() {
     <div className="main">
       <div className="chat-container">
         <div className="room-div">
+          <p>Rum:
+            <ul></ul>
+          </p>
           <button className="create-room">Skapa rum</button>
         </div>
         <div className="chatwindow-div">
