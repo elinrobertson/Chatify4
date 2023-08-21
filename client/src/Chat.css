@@ -9,7 +9,72 @@
     margin: 0;
     font-family: 'Poppins', sans-serif;
     height: 100vh;
-    overflow: hidden;        
-    background: rgb(244, 191, 92);
+    overflow: hidden;
+    display: flex; 
+    align-items: center;
+    justify-content: center;       
+    /* background: rgb(244, 191, 92); */
 }
 
+.chat-container {
+    width: 80%;
+    height: 25rem;
+    background-color: rgb(104, 104, 233);
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;    /*alignment along the main axis */
+    align-items: left;        /*how flex items are laid out along the cross axis on the current line*/
+      
+}
+
+.room-div{
+    width: 20%;
+    height: 25rem;
+    background-color: rgb(212, 212, 126);
+    border: 1px solid black;
+    display: flex;
+    
+}
+
+.chatwindow-div {
+    background-color: antiquewhite;
+    border: 1px solid black;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+   
+}
+
+.messages {
+/*chatbubblor */
+}
+
+.send-div {
+    display: flex;
+    justify-content: flex-end;
+    align-content: flex-end;
+    border: 1px solid red;
+    margin-top: auto;
+    justify-content: space-around;
+    align-content: center;
+    align-items: center;
+}
+
+.input-div {
+    width: 90%;
+    height: 3rem;
+    display: flex;
+    margin: 5px, 5px, 5px, 5px;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+.send-btn{
+    border-radius: 20%;
+    height: 3rem;
+    display: flex; 
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
