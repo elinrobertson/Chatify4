@@ -4,7 +4,9 @@ function Chat() {
   return (
     <div className="main">
       <div className="chat-container">
-        <div className="room-div"></div>
+        <div className="room-div">
+          <button className="create-room">Skapa rum</button>
+        </div>
         <div className="chatwindow-div">
           <div className="messages"></div>
             <div className="send-div">
