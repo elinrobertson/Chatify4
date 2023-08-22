@@ -12,6 +12,7 @@ interface ISocketContext {
     login: () => void   
     setRoomList: React.Dispatch<React.SetStateAction<string>>
     setUserList: React.Dispatch<React.SetStateAction<string>>
+    createRoom: () => void
 }
 
 const defaultValues = {
@@ -25,6 +26,7 @@ const defaultValues = {
     login: () => { },
     setRoomList: () => { },
     setUserList: () => { },
+    createRoom: () => { },
 }
 
 const SocketContext = createContext<ISocketContext>(defaultValues)
@@ -39,6 +41,8 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     const [roomList, setRoomList] = useState("");
     const [userList, setUserList] = useState("");
 
+
+
     useEffect (() => {
         if (room) {
             socket.emit("join_room", {room, username,})
@@ -47,22 +51,33 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     }, [room, username])
 
     useEffect(() => {
+        console.log("in use effect")
         socket.on("new_user_joined_chat", (username, room) => {
             console.log(username, room);
+            
+        })
+        socket.on("rooms", (rooms) => {
+            console.log("Available rooms are: " + rooms);
+            setRoom(rooms[1])//set room to lobby
             
         })
     },[socket])
 
     const login = () => {
         socket.connect()
+        socket.emit("init_chat", "arne") //test 
         setIsLoggedIn(true)
-        setRoom("lobby")
+        //setRoom("lobby")
+    }
+
+    const createRoom = () => {
+        socket.emit("create-room", "rum2") //test
     }
 
 
     return(
         <SocketContext.Provider value= {{ username, isLoggedIn, login, setUsername, 
-        room, setRoom, roomList, setRoomList, userList, setUserList }}>
+        room, setRoom, roomList, setRoomList, userList, setUserList, createRoom }}>
             {children}
         </SocketContext.Provider>
     )
