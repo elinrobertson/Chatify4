@@ -26,20 +26,29 @@ io.on("connection", (socket) => {
     });
 
     socket.on("join_room", ({room, username}) => {
+        //socket.leave //logik för att lämna rummet man är i innan man går med i rummet
         socket.join(room);
         socket.broadcast.emit("new_user_joined_chat", username);
-        console.log(io.sockets.adapter.rooms);
+        const roomList = convertMapOfSetsToObjectOfArrays(io.sockets.adapter.rooms);
+        console.log(roomList);
+        io.emit("list_of_rooms", roomList);
+        //console.log(io.sockets.adapter.rooms);
     });
 
-    socket.on("create-room",(room) =>{
-        rooms.push(room);
-        console.log("nytt rum " + room);
-    })
-    socket.on("list_of_rooms", ({room, username}) => {
-        
-    })
+    
 });
 
+function convertMapOfSetsToObjectOfArrays(mapOfSets) {
+
+    const objectOfArrays = {};
+  
+    for (const [key, set] of mapOfSets) {
+      objectOfArrays[key] = Array.from(set);
+    }
+
+    return objectOfArrays;
+  
+}
 
 
 server.listen(3001, () => console.log("Server is up and running"));

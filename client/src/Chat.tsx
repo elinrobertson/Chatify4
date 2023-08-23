@@ -3,7 +3,7 @@ import "./Chat.css"
 
 function Chat() {
 
-  const {room, createRoom} = useSocket()
+  const {room} = useSocket()
 
   return (
     <div className="main">
@@ -12,7 +12,7 @@ function Chat() {
           <p>Rum:
             {room}
           </p>
-          <button onClick={createRoom}className="create-room">Skapa rum</button>
+          <button onClick={() => {}}className="create-room">Skapa rum</button>
         </div>
         <div className="chatwindow-div">
           <div className="messages"></div>
