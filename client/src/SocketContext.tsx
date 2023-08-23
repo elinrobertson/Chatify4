@@ -12,7 +12,7 @@ interface ISocketContext {
     login: () => void   
     setRoomList: React.Dispatch<React.SetStateAction<string>>
     setUserList: React.Dispatch<React.SetStateAction<string>>
-    // createRoom: () => void
+    joinRoom: () => void
 }
 
 const defaultValues = {
@@ -26,7 +26,7 @@ const defaultValues = {
     login: () => { },
     setRoomList: () => { },
     setUserList: () => { },
-    // createRoom: () => { },
+    joinRoom: () => { },
 }
 
 const SocketContext = createContext<ISocketContext>(defaultValues)
@@ -46,13 +46,11 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     useEffect (() => {
         if (room) {
             socket.emit("join_room", {room, username,})
-            //setRoom
-            //setUserList            
+            
         }
     }, [room, username])
 
     useEffect(() => {
-        console.log("in use effect")
         socket.on("new_user_joined_chat", (username, room) => {
             console.log(username, room);
             
@@ -73,16 +71,18 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     }
 
     const joinRoom = () => {
+        console.log("joinat rum med " + `${socket.id}`);
+        
         //lämna gammalt rum (lägger man in socket.leave(currentRoom) i eventet create-room på servern?)
-        //joina nya rummet
-        //setRoom() //current room 
-        //setUserList
+            
+            //setRoom() //current room 
+            //setUserList för VG    
     }
 
 
     return(
         <SocketContext.Provider value= {{ username, isLoggedIn, login, setUsername, 
-        room, setRoom, roomList, setRoomList, userList, setUserList }}>
+        room, setRoom, roomList, setRoomList, userList, setUserList, joinRoom }}>
             {children}
         </SocketContext.Provider>
     )

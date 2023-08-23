@@ -26,7 +26,8 @@ io.on("connection", (socket) => {
     });
 
     socket.on("join_room", ({room, username}) => {
-        //socket.leave //logik för att lämna rummet man är i innan man går med i rummet
+        socket.leave(room); //lämna rummet man är i innan man går med i rummet
+        //få tag i rummet ("current room") skicka in i leave.room()
         socket.join(room);
         socket.broadcast.emit("new_user_joined_chat", username);
         const roomList = convertMapOfSetsToObjectOfArrays(io.sockets.adapter.rooms);
