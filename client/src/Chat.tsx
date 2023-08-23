@@ -1,15 +1,18 @@
-// import { useSocket } from './SocketContext';
+import { useSocket } from './SocketContext';
 import "./Chat.css"
 
 function Chat() {
+
+  const {room, createRoom} = useSocket()
+
   return (
     <div className="main">
       <div className="chat-container">
         <div className="room-div">
           <p>Rum:
-            <ul></ul>
+            {room}
           </p>
-          <button className="create-room">Skapa rum</button>
+          <button onClick={createRoom}className="create-room">Skapa rum</button>
         </div>
         <div className="chatwindow-div">
           <div className="messages"></div>
