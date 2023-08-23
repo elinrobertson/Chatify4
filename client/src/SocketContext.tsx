@@ -12,7 +12,7 @@ interface ISocketContext {
     login: () => void   
     setRoomList: React.Dispatch<React.SetStateAction<string>>
     setUserList: React.Dispatch<React.SetStateAction<string>>
-    createRoom: () => void
+    // createRoom: () => void
 }
 
 const defaultValues = {
@@ -26,7 +26,7 @@ const defaultValues = {
     login: () => { },
     setRoomList: () => { },
     setUserList: () => { },
-    createRoom: () => { },
+    // createRoom: () => { },
 }
 
 const SocketContext = createContext<ISocketContext>(defaultValues)
@@ -46,7 +46,8 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     useEffect (() => {
         if (room) {
             socket.emit("join_room", {room, username,})
-            
+            //setRoom
+            //setUserList            
         }
     }, [room, username])
 
@@ -56,28 +57,32 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
             console.log(username, room);
             
         })
-        socket.on("rooms", (rooms) => {
-            console.log("Available rooms are: " + rooms);
-            setRoom(rooms[1])//set room to lobby
+        socket.on("list_of_rooms", (rooms) => {
+            console.log(rooms);
+            setRoomList(rooms)
             
         })
     },[socket])
 
     const login = () => {
         socket.connect()
-        socket.emit("init_chat", "arne") //test 
+        socket.emit("init_chat")  
         setIsLoggedIn(true)
-        //setRoom("lobby")
+        setRoom("Lobby")
+        //setUserList
     }
 
-    const createRoom = () => {
-        socket.emit("create-room", "rum2") //test
+    const joinRoom = () => {
+        //lämna gammalt rum (lägger man in socket.leave(currentRoom) i eventet create-room på servern?)
+        //joina nya rummet
+        //setRoom() //current room 
+        //setUserList
     }
 
 
     return(
         <SocketContext.Provider value= {{ username, isLoggedIn, login, setUsername, 
-        room, setRoom, roomList, setRoomList, userList, setUserList, createRoom }}>
+        room, setRoom, roomList, setRoomList, userList, setUserList }}>
             {children}
         </SocketContext.Provider>
     )
