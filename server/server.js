@@ -12,7 +12,7 @@ const io = new Server(server, {
     },
 });
 
-const rooms = ["Lobby", "Room1"]
+const rooms = ["Lobby"]
 
 app.use(cors());
 
@@ -22,17 +22,22 @@ io.on("connection", (socket) => {
     socket.on("init_chat", (username) => {
         console.log("inside init chat")
         socket.emit("new_user_joined_chat", username);
-        socket.emit("rooms", rooms);
+        //socket.emit("rooms", rooms);
     });
 
-    socket.on("join_room", ({room, username}) => {
-        socket.leave(room); //lämna rummet man är i innan man går med i rummet
+    socket.on("join_room", ({previousRoom, room, username}) => {
+        console.log("Leaving room: " + previousRoom)
+        console.log(socket.id)
+        socket.leave(previousRoom); //lämna rummet man är i innan man går med i rummet
         //få tag i rummet ("current room") skicka in i leave.room()
+        console.log("Joining room " + room)
         socket.join(room);
         socket.broadcast.emit("new_user_joined_chat", username);
         const roomList = convertMapOfSetsToObjectOfArrays(io.sockets.adapter.rooms);
         console.log(roomList);
         io.emit("list_of_rooms", roomList);
+        console.log(socket.id)
+        console.log(roomList)
         //console.log(io.sockets.adapter.rooms);
     });
 

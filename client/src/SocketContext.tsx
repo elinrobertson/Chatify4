@@ -13,6 +13,7 @@ interface ISocketContext {
     setRoomList: React.Dispatch<React.SetStateAction<string>>
     setUserList: React.Dispatch<React.SetStateAction<string>>
     joinRoom: () => void
+    handleRoomChange: (newRoom: string) => void
 }
 
 const defaultValues = {
@@ -27,6 +28,7 @@ const defaultValues = {
     setRoomList: () => { },
     setUserList: () => { },
     joinRoom: () => { },
+    handleRoomChange: (newRoom: string) => { },
 }
 
 const SocketContext = createContext<ISocketContext>(defaultValues)
@@ -41,11 +43,13 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     const [roomList, setRoomList] = useState("");
     const [userList, setUserList] = useState("");
 
+    const [previousRoom, setPreviousRoom] = useState("");
+
 
 
     useEffect (() => {
         if (room) {
-            socket.emit("join_room", {room, username,}) 
+            socket.emit("join_room", {previousRoom, room, username,}) 
         }
     }, [room, username])
 
@@ -76,11 +80,19 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
         }
     }
     
-
+    const handleRoomChange = (newRoom: string) => {
+        // Save the previous room value before updating the state
+        setPreviousRoom(room);
+    
+        // Update the state with the new room value
+        setRoom(newRoom);
+        console.log("Previous room " + previousRoom)
+        socket.emit("join_room", { previousRoom, room, username });
+      };
 
     return(
         <SocketContext.Provider value= {{ username, isLoggedIn, login, setUsername, 
-        room, setRoom, roomList, setRoomList, userList, setUserList, joinRoom }}>
+        room, setRoom, roomList, setRoomList, userList, setUserList, joinRoom, handleRoomChange }}>
             {children}
         </SocketContext.Provider>
     )
