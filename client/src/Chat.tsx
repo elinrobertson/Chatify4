@@ -1,9 +1,20 @@
 import { useSocket } from './SocketContext';
+import { useState } from 'react';
 import "./Chat.css"
 
 function Chat() {
 
-  const {room, setRoom, joinRoom} = useSocket()
+  const { room, setRoom, joinRoom } = useSocket();
+
+  // Håll ett separat tillstånd för input-värdet
+  const [inputRoom, setInputRoom] = useState('');
+
+  const handleJoinRoom = () => {
+    if (inputRoom) {
+      setRoom(inputRoom); // Uppdatera rummet med input-värdet
+      joinRoom(); // Anropa joinRoom
+    }
+  };
 
   return (
     <div className="main">
@@ -12,8 +23,8 @@ function Chat() {
           <p>Rum:
             {room}
           </p>
-          <input value={ room } onChange={(e) => setRoom(e.target.value)} type="text" placeholder="Rum"/>
-          <button onClick={joinRoom}className="create-room">Skapa rum</button>
+          <input value={ inputRoom } onChange={(e) => setInputRoom(e.target.value)} type="text" placeholder="Rum"/>
+          <button onClick={handleJoinRoom}className="create-room">Skapa rum</button>
         </div>
         <div className="chatwindow-div">
           <div className="messages"></div>

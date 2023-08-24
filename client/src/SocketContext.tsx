@@ -45,8 +45,7 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
 
     useEffect (() => {
         if (room) {
-            socket.emit("join_room", {room, username,})
-            
+            socket.emit("join_room", {room, username,}) 
         }
     }, [room, username])
 
@@ -71,13 +70,12 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     }
 
     const joinRoom = () => {
-        console.log("joinat rum med " + `${socket.id}`);
-        
-        //lämna gammalt rum (lägger man in socket.leave(currentRoom) i eventet create-room på servern?)
-            
-            //setRoom() //current room 
-            //setUserList för VG    
+        if (room) {
+            console.log(`Joined room: ${room}`);
+            socket.emit("join_room", { room, username });
+        }
     }
+    
 
 
     return(
