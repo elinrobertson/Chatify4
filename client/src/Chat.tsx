@@ -4,17 +4,17 @@ import "./Chat.css"
 
 function Chat() {
 
-  const { room, setRoom, joinRoom } = useSocket();
+  const { room, setRoom, joinRoom, handleRoomChange } = useSocket();
 
   // Håll ett separat tillstånd för input-värdet
-  const [inputRoom, setInputRoom] = useState('');
+  const [inputRoom, setInputRoom] = useState('Lobby');
 
-  const handleJoinRoom = () => {
-    if (inputRoom) {
-      setRoom(inputRoom); // Uppdatera rummet med input-värdet
-      joinRoom(); // Anropa joinRoom
-    }
-  };
+  // const handleJoinRoom = () => {
+  //   if (inputRoom) {
+  //     setRoom(inputRoom); // Uppdatera rummet med input-värdet
+  //     joinRoom(); // Anropa joinRoom
+  //   }
+  // };
 
   return (
     <div className="main">
@@ -24,7 +24,7 @@ function Chat() {
             {room}
           </p>
           <input value={ inputRoom } onChange={(e) => setInputRoom(e.target.value)} type="text" placeholder="Rum"/>
-          <button onClick={handleJoinRoom}className="create-room">Skapa rum</button>
+          <button onClick={() => handleRoomChange(inputRoom)}className="create-room">Skapa rum</button>
         </div>
         <div className="chatwindow-div">
           <div className="messages"></div>
