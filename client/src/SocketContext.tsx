@@ -40,10 +40,8 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState("");
     const [room, setRoom] = useState("");
-    // const [roomList, setRoomList] = useState("");
     const [roomList, setRoomList] = useState<string[]>([]);
     const [userList, setUserList] = useState("");
-
     const [previousRoom, setPreviousRoom] = useState("");
 
 
