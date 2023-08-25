@@ -4,7 +4,7 @@ import "./Chat.css"
 
 function Chat() {
 
-  const { room, setRoom, joinRoom, handleRoomChange } = useSocket();
+  const { room, handleRoomChange, roomList } = useSocket();
 
   // Håll ett separat tillstånd för input-värdet
   const [inputRoom, setInputRoom] = useState('Lobby');
@@ -21,6 +21,10 @@ function Chat() {
       <div className="chat-container">
         <div className="room-div">
           <p>Rum:
+            {/* <p onClick="handleRoomChange("Lobby")>Lobby</p>
+            {roomList.map( (room) => {
+              handleRoomChange(room)
+            })} */}
             {room}
           </p>
           <input value={ inputRoom } onChange={(e) => setInputRoom(e.target.value)} type="text" placeholder="Rum"/>

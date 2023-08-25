@@ -5,12 +5,12 @@ interface ISocketContext {
     isLoggedIn: boolean
     username: string
     room: string
-    roomList: string
+    roomList: string[]
     userList: string
     setRoom: React.Dispatch<React.SetStateAction<string>>
     setUsername: React.Dispatch<React.SetStateAction<string>>
     login: () => void   
-    setRoomList: React.Dispatch<React.SetStateAction<string>>
+    setRoomList: React.Dispatch<React.SetStateAction<string[]>>
     setUserList: React.Dispatch<React.SetStateAction<string>>
     joinRoom: () => void
     handleRoomChange: (newRoom: string) => void
@@ -20,7 +20,7 @@ const defaultValues = {
     isLoggedIn: false,
     username: "",
     room: "",
-    roomList: "",
+    roomList: [],
     userList: "",
     setRoom: () => { },
     setUsername: () => { },
@@ -40,7 +40,8 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState("");
     const [room, setRoom] = useState("");
-    const [roomList, setRoomList] = useState("");
+    // const [roomList, setRoomList] = useState("");
+    const [roomList, setRoomList] = useState<string[]>([]);
     const [userList, setUserList] = useState("");
 
     const [previousRoom, setPreviousRoom] = useState("");
@@ -59,7 +60,7 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
             
         })
         socket.on("list_of_rooms", (rooms) => {
-            console.log(rooms);
+            console.log(rooms); 
             setRoomList(rooms)
             
         })

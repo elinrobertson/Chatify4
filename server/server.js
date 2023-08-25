@@ -12,7 +12,7 @@ const io = new Server(server, {
     },
 });
 
-const rooms = ["Lobby"]
+// const rooms = ["Lobby", "Room1"]
 
 app.use(cors());
 
@@ -32,12 +32,12 @@ io.on("connection", (socket) => {
         //få tag i rummet ("current room") skicka in i leave.room()
         console.log("Joining room " + room)
         socket.join(room);
-        socket.broadcast.emit("new_user_joined_chat", username);
+        socket.broadcast.emit("new_user_joined_chat", username); //tar vi emot detta hos clienten???
         const roomList = convertMapOfSetsToObjectOfArrays(io.sockets.adapter.rooms);
         console.log(roomList);
         io.emit("list_of_rooms", roomList);
         console.log(socket.id)
-        console.log(roomList)
+        //console.log(rooms)
         //console.log(io.sockets.adapter.rooms);
     });
 
