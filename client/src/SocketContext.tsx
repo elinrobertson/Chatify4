@@ -28,7 +28,7 @@ const defaultValues = {
     setRoomList: () => { },
     setUserList: () => { },
     joinRoom: () => { },
-    handleRoomChange: (newRoom: string) => { },
+    handleRoomChange: () => { }, //newRoom: string
 }
 
 const SocketContext = createContext<ISocketContext>(defaultValues)

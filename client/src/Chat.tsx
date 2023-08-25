@@ -4,7 +4,7 @@ import "./Chat.css"
 
 function Chat() {
 
-  const { room, handleRoomChange, roomList } = useSocket();
+  const { room, handleRoomChange } = useSocket(); // roomList
 
   // Håll ett separat tillstånd för input-värdet
   const [inputRoom, setInputRoom] = useState('Lobby');
