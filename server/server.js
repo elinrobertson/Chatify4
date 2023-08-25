@@ -32,7 +32,7 @@ io.on("connection", (socket) => {
         console.log("Joining room " + room)
         socket.join(room);
         socket.broadcast.emit("new_user_joined_chat", username);
-        let roomList = convertMapOfSetsToObjectOfArrays(io.sockets.adapter.rooms);
+        let roomList = convertMapOfSetsToObjectOfArrays(io.sockets.adapter.rooms, io.sockets);//skickar med sockets
         if (!roomList.hasOwnProperty("Lobby")) {
             roomList = {...roomList, "Lobby": []}
         }
@@ -44,12 +44,16 @@ io.on("connection", (socket) => {
     
 });
 
-function convertMapOfSetsToObjectOfArrays(mapOfSets) {
+function convertMapOfSetsToObjectOfArrays(mapOfSets, sockets) {
 
     const objectOfArrays = {};
-  
+  //
     for (const [key, set] of mapOfSets) {
-      objectOfArrays[key] = Array.from(set);
+        if(!sockets.sockets.has(key)) {        //om nyckeln inte finns bland 
+            //anslutna sockets, så ska nyckeln läggas till i objektet. Skulle 
+            //nyckeln finnas så är det ett socket.id som vi inte vill skicka med
+            objectOfArrays[key] = Array.from(set);
+        }
     }
     //få tag i keys för map-listan, key från index1 (index0 är socket-id)
     //skicka till klienten
