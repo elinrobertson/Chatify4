@@ -51,7 +51,9 @@ function convertMapOfSetsToObjectOfArrays(mapOfSets) {
     for (const [key, set] of mapOfSets) {
       objectOfArrays[key] = Array.from(set);
     }
-
+    //få tag i keys för map-listan, key från index1 (index0 är socket-id)
+    //skicka till klienten
+    console.log(objectOfArrays);
     return objectOfArrays;
   
 }

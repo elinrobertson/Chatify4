@@ -13,8 +13,10 @@ function Chat() {
     <div className="main">
       <div className="chat-container">
         <div className="room-div">
-          <h3>Rum:</h3>
-            <p>{room}</p>
+          <h3>Rum</h3>
+            <p>Du är i {room}</p>
+            <h3>Gå med i:</h3>
+            {/* <ul>{roomlist}</ul> */}
             <div className='room_input-div'>
               <input value={ inputRoom } onChange={(e) => setInputRoom(e.target.value)} type="text" placeholder="Rum"/>
               <button onClick={() => handleRoomChange(inputRoom)}className="create-room">Skapa rum</button>
