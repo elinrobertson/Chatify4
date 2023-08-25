@@ -4,10 +4,12 @@ import "./Chat.css"
 
 function Chat() {
 
-  const { room, handleRoomChange } = useSocket(); // roomList
+  const { room, handleRoomChange, roomList } = useSocket(); // roomList
 
   // Håll ett separat tillstånd för input-värdet
   const [inputRoom, setInputRoom] = useState('');
+
+  const roomNames = Object.keys(roomList); //Då det är ett objekt vi tar emot från servern gör vi om det till Object.keys
 
   return (
     <div className="main">
@@ -16,6 +18,12 @@ function Chat() {
           <h3>Rum</h3>
             <p>Du är i {room}</p>
             <h3>Gå med i:</h3>
+            <ul>
+              // listan med rumsnamn
+            {roomNames.map((roomName) => (
+              <li key={roomName}>{roomName}</li>
+            ))}
+        </ul>
             {/* <ul>{roomlist}</ul> */}
             <div className='room_input-div'>
               <input value={ inputRoom } onChange={(e) => setInputRoom(e.target.value)} type="text" placeholder="Rum"/>
