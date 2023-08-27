@@ -13,13 +13,13 @@ function Chat() {
 
   return (
     <div className="main">
-      <div className="chat-container">
-        <div className="room-div">
+      <div className="wrapper">
+        <div className="chat-container">
+          <div className="room-div">
           <h3>Rum</h3>
             <p>Du är i {room}</p>
             <h3>Gå med i:</h3>
             <ul>
-              // listan med rumsnamn
             {roomNames.map((roomName) => (
               <li key={roomName}>{roomName}</li>
             ))}
@@ -27,15 +27,16 @@ function Chat() {
             {/* <ul>{roomlist}</ul> */}
             <div className='room_input-div'>
               <input value={ inputRoom } onChange={(e) => setInputRoom(e.target.value)} type="text" placeholder="Rum"/>
-              <button onClick={() => handleRoomChange(inputRoom)}className="create-room">Skapa rum</button>
+              <button onClick={() => handleRoomChange(inputRoom)}className="create-room-btn">Skapa rum</button>
             </div>
          </div>
         <div className="chatwindow-div">
           <div className="messages"></div>
             <div className="send-div">
               <input className="input-div "type="text" placeholder="Skriv ditt meddelande..." />
-              <button className="send-btn">Skicka</button>
+              <button className="send-btn"><i className="fa-solid fa-paper-plane"></i></button>
               </div> 
+           </div>
         </div>
       </div>
     </div>
