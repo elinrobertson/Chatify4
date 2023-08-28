@@ -11,6 +11,11 @@ function Chat() {
 
   const roomNames = Object.keys(roomList); //Då det är ett objekt vi tar emot från servern gör vi om det till Object.keys
 
+const handleRoomChangeWrapper = (room: string) => {  //Då det bara är här i chat komponenten vi behöver denna funktion så behöver vi inte lägga in detta i contexten detta är inget vi behöver skicka till servern
+    handleRoomChange(room)
+    setInputRoom("");
+}
+
   return (
     <div className="main">
       <div className="wrapper">
@@ -27,7 +32,7 @@ function Chat() {
             {/* <ul>{roomlist}</ul> */}
             <div className='room_input-div'>
               <input value={ inputRoom } onChange={(e) => setInputRoom(e.target.value)} type="text" placeholder="Rum"/>
-              <button onClick={() => handleRoomChange(inputRoom)}className="create-room-btn">Skapa rum</button>
+              <button onClick={() => handleRoomChangeWrapper(inputRoom)}className="create-room">Skapa rum</button>
             </div>
          </div>
         <div className="chatwindow-div">
