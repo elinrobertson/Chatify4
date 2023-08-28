@@ -121,17 +121,26 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
         socket.emit("join_room", { previousRoom, room, username });
     };
 
+    
     const sendMessage = async () => {
         if (currentMessage !== "") {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+    
+            const formattedHours = hours.toString().padStart(2, '0');
+            const formattedMinutes = minutes.toString().padStart(2, '0');
+            const formattedTime = `${formattedHours}:${formattedMinutes}`;
+    
             const messageData = {
                 room: room,
                 author: username,
                 message: currentMessage,
-                time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes()
+                time: formattedTime
             };
-
+    
             await socket.emit("send_message", messageData);
-            setMessageList( [...messageList, messageData]);
+            setMessageList([...messageList, messageData]);
             console.log(messageData);
             setCurrentMessage("");
         }
