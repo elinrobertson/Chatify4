@@ -139,9 +139,9 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     
 
     return(
-        <SocketContext.Provider value= {{ username, isLoggedIn, login, setUsername, 
-        room, setRoom, roomList, setRoomList, userList, setUserList, joinRoom, handleRoomChange, 
-        setMessageList, messageList, currentMessage,setCurrentMessage, sendMessage }}>
+        <SocketContext.Provider value= {{ isLoggedIn, login, joinRoom, handleRoomChange,sendMessage, 
+            username, setUsername, room, setRoom, roomList, setRoomList, userList, setUserList,  
+            messageList, setMessageList, currentMessage, setCurrentMessage,  }}>
             {children}
         </SocketContext.Provider>
     )
