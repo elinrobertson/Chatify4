@@ -25,10 +25,14 @@ const handleRoomChangeWrapper = (room: string) => {  //Då det bara är här i c
             <p>Du är i {room}</p>
             <h3>Gå med i:</h3>
             <ul>
-            {roomNames.map((roomName) => (
-              <li key={roomName}>{roomName}</li>
-            ))}
-        </ul>
+              {roomNames.map((roomName) => (
+                <li key={roomName}>
+                  <div onClick={() => handleRoomChangeWrapper(roomName)}>
+                    {roomName}
+                  </div>
+                </li>
+              ))}
+            </ul>
             {/* <ul>{roomlist}</ul> */}
             <div className='room_input-div'>
               <input value={ inputRoom } onChange={(e) => setInputRoom(e.target.value)} type="text" placeholder="Rum"/>

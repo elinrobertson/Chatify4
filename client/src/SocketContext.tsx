@@ -28,7 +28,7 @@ const defaultValues = {
     setRoomList: () => { },
     setUserList: () => { },
     joinRoom: () => { },
-    handleRoomChange: () => { }, //newRoom: string
+    handleRoomChange: () => { }, 
 }
 
 const SocketContext = createContext<ISocketContext>(defaultValues)
@@ -62,15 +62,22 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
             setRoomList(roomList)
             
         })
+
+        socket.on("user_disconnected", () => {
+            console.log("user disconnected")
+    });
+
     },[socket])
+
 
     const login = () => {
         socket.connect()
         socket.emit("init_chat")  
         setIsLoggedIn(true)
         setRoom("Lobby")
-        //setUserList
+        //setUserList för VG
     }
+
 
     const joinRoom = () => {
         if (room) {
@@ -79,15 +86,16 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
         }
     }
     
+
     const handleRoomChange = (newRoom: string) => {
         // Save the previous room value before updating the state
         setPreviousRoom(room);
-    
         // Update the state with the new room value
         setRoom(newRoom);
         console.log("Previous room " + previousRoom)
         socket.emit("join_room", { previousRoom, room, username });
       };
+    
 
     return(
         <SocketContext.Provider value= {{ username, isLoggedIn, login, setUsername, 
