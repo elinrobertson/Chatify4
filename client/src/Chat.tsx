@@ -32,7 +32,7 @@ const handleRoomChangeWrapper = (room: string) => {  //Då det bara är här i c
             {/* <ul>{roomlist}</ul> */}
             <div className='room_input-div'>
               <input value={ inputRoom } onChange={(e) => setInputRoom(e.target.value)} type="text" placeholder="Rum"/>
-              <button onClick={() => handleRoomChangeWrapper(inputRoom)}className="create-room">Skapa rum</button>
+              <button onClick={() => handleRoomChangeWrapper(inputRoom)}className="create-room-btn">Skapa rum</button>
             </div>
          </div>
         <div className="chatwindow-div">
