@@ -22,8 +22,6 @@ const handleRoomChangeWrapper = (room: string) => {  //Då det bara är här i c
         <div className="chat-container">
           <div className="room-div">
           <h3>Rum</h3>
-            <p>Du är i {room}</p>
-            <h3>Gå med i:</h3>
             <ul>
               {roomNames.map((roomName) => (
                 <li key={roomName} onClick={() => handleRoomChangeWrapper(roomName)}>
@@ -38,6 +36,7 @@ const handleRoomChangeWrapper = (room: string) => {  //Då det bara är här i c
             </div>
          </div>
         <div className="chatwindow-div">
+          <p>Du är i {room}</p>
           <div className="messages"></div>
             <div className="send-div">
               <input className="input-div "type="text" placeholder="Skriv ditt meddelande..." />
