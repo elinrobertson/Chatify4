@@ -41,13 +41,21 @@ io.on("connection", (socket) => {
         console.log(socket.id)
     });
 
+    socket.on("disconnect", ({username, socket}) => {
+        let roomList = convertMapOfSetsToObjectOfArrays(io.sockets.adapter.rooms, io.sockets);
+        if (!roomList.hasOwnProperty("Lobby")) {
+            roomList = {...roomList, "Lobby": []}
+        }
+        io.emit("list_of_rooms", roomList);
+    });
     
 });
+
 
 function convertMapOfSetsToObjectOfArrays(mapOfSets, sockets) {
 
     const objectOfArrays = {};
-  //
+
     for (const [key, set] of mapOfSets) {
         if(!sockets.sockets.has(key)) {        //om nyckeln inte finns bland 
             //anslutna sockets, så ska nyckeln läggas till i objektet. Skulle 
@@ -55,11 +63,9 @@ function convertMapOfSetsToObjectOfArrays(mapOfSets, sockets) {
             objectOfArrays[key] = Array.from(set);
         }
     }
-    //få tag i keys för map-listan, key från index1 (index0 är socket-id)
-    //skicka till klienten
+   
     console.log(objectOfArrays);
     return objectOfArrays;
-  
 }
 
 
