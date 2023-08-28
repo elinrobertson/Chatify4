@@ -4,7 +4,7 @@ import "./Chat.css"
 
 function Chat() {
 
-  const { room, handleRoomChange, roomList } = useSocket(); // roomList
+  const { room, handleRoomChange, roomList, currentMessage, setCurrentMessage, sendMessage } = useSocket(); // roomList
 
   // Håll ett separat tillstånd för input-värdet
   const [inputRoom, setInputRoom] = useState('');
@@ -15,6 +15,7 @@ const handleRoomChangeWrapper = (room: string) => {  //Då det bara är här i c
     handleRoomChange(room)
     setInputRoom("");
 }
+
 
   return (
     <div className="main">
@@ -37,10 +38,19 @@ const handleRoomChangeWrapper = (room: string) => {  //Då det bara är här i c
          </div>
         <div className="chatwindow-div">
           <p>Du är i {room}</p>
-          <div className="messages"></div>
+          <div className="messages">
+            {/* {messageList.map} */}
+          </div>
             <div className="send-div">
-              <input className="input-div "type="text" placeholder="Skriv ditt meddelande..." />
-              <button className="send-btn"><i className="fa-solid fa-paper-plane"></i></button>
+              <input className="input-div"
+              type="text" 
+              value={currentMessage} 
+              placeholder="Skriv ditt meddelande..." 
+              onChange={(e) => {
+                setCurrentMessage(e.target.value)
+              }}
+            />
+              <button onClick={sendMessage} className="send-btn"><i className="fa-solid fa-paper-plane"></i></button>
               </div> 
            </div>
         </div>

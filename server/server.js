@@ -41,6 +41,10 @@ io.on("connection", (socket) => {
         console.log(socket.id)
     });
 
+    socket.on("send_message", (data) => {
+        socket.to(data.room).emit("receive_message", data)
+    })
+
     socket.on("disconnect", ({username, socket}) => {
         let roomList = convertMapOfSetsToObjectOfArrays(io.sockets.adapter.rooms, io.sockets);
         if (!roomList.hasOwnProperty("Lobby")) {

@@ -1,5 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { PropsWithChildren, createContext, useContext, useState, useEffect } from "react"
 import { io } from "socket.io-client";
+
+interface IMessage {
+    room: string
+    author: string
+    message: string
+    time: string
+}
 
 interface ISocketContext {
     isLoggedIn: boolean
@@ -14,6 +22,11 @@ interface ISocketContext {
     setUserList: React.Dispatch<React.SetStateAction<string>>
     joinRoom: () => void
     handleRoomChange: (newRoom: string) => void
+    setMessageList: React.Dispatch<React.SetStateAction<IMessage[]>>
+    messageList: IMessage[]
+    currentMessage: string
+    setCurrentMessage: React.Dispatch<React.SetStateAction<string>>
+    sendMessage: () => void
 }
 
 const defaultValues = {
@@ -28,10 +41,16 @@ const defaultValues = {
     setRoomList: () => { },
     setUserList: () => { },
     joinRoom: () => { },
-    handleRoomChange: () => { }, 
+    handleRoomChange: () => { },
+    setMessageList: () => { },
+    messageList: [],
+    currentMessage: "",
+    setCurrentMessage: () => { },
+    sendMessage: () => { },
 }
 
 const SocketContext = createContext<ISocketContext>(defaultValues)
+// eslint-disable-next-line react-refresh/only-export-components
 export const useSocket = () => useContext(SocketContext)
 const socket = io("http://localhost:3001", { autoConnect: false} )
 
@@ -43,6 +62,8 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     const [roomList, setRoomList] = useState<string[]>([]);
     const [userList, setUserList] = useState("");
     const [previousRoom, setPreviousRoom] = useState("");
+    const [messageList, setMessageList] = useState<IMessage[]>([]);
+    const [currentMessage, setCurrentMessage] = useState("");
 
 
 
@@ -50,24 +71,28 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
         if (room) {
             socket.emit("join_room", {previousRoom, room, username,}) 
         }
-    }, [room, username])
+    },[room, username])
 
     useEffect(() => {
         socket.on("new_user_joined_chat", (username, room) => {
             console.log(username, room);
-            
-        })
+        });
+
         socket.on("list_of_rooms", (roomList) => {
             console.log(roomList); 
             setRoomList(roomList)
-            
-        })
+        });
 
         socket.on("user_disconnected", () => {
             console.log("user disconnected")
-    });
-
+        });
     },[socket])
+
+    useEffect(() => {
+        socket.on("receive_message", (data) => {
+            setMessageList((list) => [...list, data]);
+        });
+    },[socket]);
 
 
     const login = () => {
@@ -94,12 +119,29 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
         setRoom(newRoom);
         console.log("Previous room " + previousRoom)
         socket.emit("join_room", { previousRoom, room, username });
-      };
+    };
+
+    const sendMessage = async () => {
+        if (currentMessage !== "") {
+            const messageData = {
+                room: room,
+                author: username,
+                message: currentMessage,
+                time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes()
+            };
+
+            await socket.emit("send_message", messageData);
+            setMessageList( [...messageList, messageData]);
+            console.log(messageData);
+            setCurrentMessage("");
+        }
+    };
     
 
     return(
         <SocketContext.Provider value= {{ username, isLoggedIn, login, setUsername, 
-        room, setRoom, roomList, setRoomList, userList, setUserList, joinRoom, handleRoomChange }}>
+        room, setRoom, roomList, setRoomList, userList, setUserList, joinRoom, handleRoomChange, 
+        setMessageList, messageList, currentMessage,setCurrentMessage, sendMessage }}>
             {children}
         </SocketContext.Provider>
     )
