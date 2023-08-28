@@ -26,10 +26,8 @@ const handleRoomChangeWrapper = (room: string) => {  //Då det bara är här i c
             <h3>Gå med i:</h3>
             <ul>
               {roomNames.map((roomName) => (
-                <li key={roomName}>
-                  <div onClick={() => handleRoomChangeWrapper(roomName)}>
-                    {roomName}
-                  </div>
+                <li key={roomName} onClick={() => handleRoomChangeWrapper(roomName)}>
+                {roomName}
                 </li>
               ))}
             </ul>
