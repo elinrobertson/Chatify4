@@ -3,6 +3,7 @@ import { PropsWithChildren, createContext, useContext, useState, useEffect } fro
 import { io } from "socket.io-client";
 
 interface IMessage {
+    id: number
     room: string
     author: string
     message: string
@@ -29,6 +30,11 @@ interface ISocketContext {
     currentMessage: string
     setCurrentMessage: React.Dispatch<React.SetStateAction<string>>
     sendMessage: () => void
+    isSending: boolean
+    setIsSending: React.Dispatch<React.SetStateAction<boolean>>
+    isTyping: boolean
+    setIsTyping: React.Dispatch<React.SetStateAction<boolean>>
+    handleTyping: () => void
 }
 
 const defaultValues = {
@@ -49,6 +55,11 @@ const defaultValues = {
     currentMessage: "",
     setCurrentMessage: () => { },
     sendMessage: () => { },
+    handleTyping: () => { },
+    isSending:false,
+    setIsSending:() => { },
+    isTyping: true,
+    setIsTyping: () => { },
 }
 
 const SocketContext = createContext<ISocketContext>(defaultValues)
@@ -127,6 +138,38 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     };
 
     
+    // const sendMessage = async () => {
+    //     if (currentMessage !== "") {
+    //       const now = new Date();
+    //       const hours = now.getHours();
+    //       const minutes = now.getMinutes();
+      
+    //       const formattedHours = hours.toString().padStart(2, '0');
+    //       const formattedMinutes = minutes.toString().padStart(2, '0');
+    //       const formattedTime = `${formattedHours}:${formattedMinutes}`;
+      
+    //       const messageData = {
+    //         id: new Date().getTime(), // Unikt id genererat från tidsstämpel
+    //         room: room,
+    //         author: username,
+    //         message: currentMessage,
+    //         time: formattedTime
+    //       };
+      
+    //       await socket.emit("send_message", messageData);
+    //       setMessageList([...messageList, messageData]);
+    //       console.log(messageData);
+    //       setCurrentMessage("");
+    //     }
+    //   };
+
+    const [isTyping, setIsTyping] = useState(false);
+    const [isSending, setIsSending] = useState(false);
+    
+    const handleTyping = (isTyping: boolean) => {
+      setIsTyping(isTyping);
+    };
+    
     const sendMessage = async () => {
         if (currentMessage !== "") {
             const now = new Date();
@@ -138,24 +181,31 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
             const formattedTime = `${formattedHours}:${formattedMinutes}`;
     
             const messageData = {
+                id: new Date().getTime(),
                 room: room,
                 author: username,
                 message: currentMessage,
                 time: formattedTime
             };
     
+            // Visar "Skriver..." meddelandet
+            setIsSending(true);
+            setIsTyping(false);
+    
             await socket.emit("send_message", messageData);
             setMessageList([...messageList, messageData]);
             console.log(messageData);
             setCurrentMessage("");
+            setIsSending(false); // Återställer när meddelandet har skickats
         }
     };
+    
     
 
     return(
         <SocketContext.Provider value= {{ isLoggedIn, login, joinRoom, handleRoomChange,sendMessage, 
             username, setUsername, room, setRoom, roomList, setRoomList, userList, setUserList,  
-            messageList, setMessageList, currentMessage, setCurrentMessage,  }}>
+            messageList, setMessageList, currentMessage, setCurrentMessage, handleTyping, isTyping, setIsTyping, isSending, setIsSending }}>
             {children}
         </SocketContext.Provider>
     )

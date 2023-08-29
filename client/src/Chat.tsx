@@ -18,11 +18,17 @@ const handleRoomChangeWrapper = (room: string) => {  //Då det bara är här i c
     setInputRoom("");
 }
 
+const [isTyping, setIsTyping] = useState(false);
+
+const handleTyping = (isTyping: boolean) => {
+  setIsTyping(isTyping);
+};
+
 
   return (
     <div className="main">
       <div className="wrapper">
-        <div className="chat-container">
+        <div id="chat-container">
           <div className="room-div">
             <h3>Rum</h3>
               <ul>
@@ -44,29 +50,32 @@ const handleRoomChangeWrapper = (room: string) => {  //Då det bara är här i c
             <ScrollToBottom className="message-div">
               {messageList.map((messageContent) => {
                 return(
-                  <div>
+                  <div key={messageContent.id}>
                     <div className="message" id={username === messageContent.author ? "my-messages" : "other-messages"}>
-                        <div className="message-content">
-                          <p>{messageContent.message}</p>
-                        </div>
-                        <div className="message-meta">
+                      <div className="message-content">
+                        <p>{messageContent.message}</p>
+                      </div>
+                      <div className="message-meta">
                         <p id="time">{messageContent.time}</p>
                         <p id="author">{messageContent.author}</p>
                       </div>
                     </div>
-                      
+                    {messageContent.author === username && isTyping ? (
+                      <p>Skriver...</p>
+                    ) : null}
                   </div>
-                 
                 );
               })}
-            </ScrollToBottom> 
+            </ScrollToBottom>
             <div className="send-div">
               <input className="input-div"
                 type="text" 
                 value={currentMessage} 
                 placeholder="Skriv ditt meddelande..." 
                 onChange={(e) => {
-                  setCurrentMessage(e.target.value)
+                  // setCurrentMessage(e.target.value)
+                  setCurrentMessage(e.target.value);
+                  handleTyping(e.target.value.length > 0); 
                 }}/>
               <button onClick={sendMessage} className="send-btn"><i className="fa-solid fa-paper-plane"></i></button>
             </div> 
