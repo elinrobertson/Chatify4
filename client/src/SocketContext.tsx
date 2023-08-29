@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { PropsWithChildren, createContext, useContext, useState, useEffect } from "react"
+import { PropsWithChildren, createContext, useContext, useState, useEffect, useRef } from "react"
 import { io } from "socket.io-client";
 
 interface IMessage {
@@ -8,8 +8,6 @@ interface IMessage {
     message: string
     time: string
 }
-
-//ny kommentar
 
 interface ISocketContext {
     isLoggedIn: boolean
@@ -29,6 +27,7 @@ interface ISocketContext {
     currentMessage: string
     setCurrentMessage: React.Dispatch<React.SetStateAction<string>>
     sendMessage: () => void
+    scroll: React.RefObject<HTMLDivElement> | null;
 }
 
 const defaultValues = {
@@ -49,6 +48,7 @@ const defaultValues = {
     currentMessage: "",
     setCurrentMessage: () => { },
     sendMessage: () => { },
+    scroll: null, 
 }
 
 const SocketContext = createContext<ISocketContext>(defaultValues)
@@ -66,6 +66,8 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     const [previousRoom, setPreviousRoom] = useState("");
     const [messageList, setMessageList] = useState<IMessage[]>([]);
     const [currentMessage, setCurrentMessage] = useState("");
+    const scroll = useRef<HTMLDivElement | null>(null);
+    
 
 
 
@@ -96,6 +98,10 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
             setMessageList((list) => [...list, data]);
         });
     },[socket]);
+
+    useEffect(() => {
+        scroll.current?.scrollIntoView({})
+    }, [messageList])
 
 
     const login = () => {
@@ -155,7 +161,7 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     return(
         <SocketContext.Provider value= {{ isLoggedIn, login, joinRoom, handleRoomChange,sendMessage, 
             username, setUsername, room, setRoom, roomList, setRoomList, userList, setUserList,  
-            messageList, setMessageList, currentMessage, setCurrentMessage,  }}>
+            messageList, setMessageList, currentMessage, setCurrentMessage, scroll }}>
             {children}
         </SocketContext.Provider>
     )

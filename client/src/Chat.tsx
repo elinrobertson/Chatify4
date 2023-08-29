@@ -1,12 +1,11 @@
 import { useSocket } from './SocketContext';
 import { useState } from 'react';
-import ScrollToBottom from "react-scroll-to-bottom";
 import "./Chat.css"
 
 
 function Chat() {
 
-  const { room, username, handleRoomChange, roomList, currentMessage, setCurrentMessage, sendMessage, messageList } = useSocket(); 
+  const { room, username, handleRoomChange, roomList, currentMessage, setCurrentMessage, sendMessage, messageList, scroll } = useSocket(); 
 
   // Håll ett separat tillstånd för input-värdet
   const [inputRoom, setInputRoom] = useState('');
@@ -19,9 +18,11 @@ const handleRoomChangeWrapper = (room: string) => {  //Då det bara är här i c
 }
 
 
+
+
   return (
     <div className="main">
-      <div className="wrapper">
+      {/* <div className="wrapper"> */}
         <div className="chat-container">
           <div className="room-div">
             <h3>Rum</h3>
@@ -41,7 +42,8 @@ const handleRoomChangeWrapper = (room: string) => {  //Då det bara är här i c
          
           <div className="chatwindow-div">
             <p>Du är i {room}</p>
-            <ScrollToBottom className="message-div">
+            <div className="message-div">
+              <div ref= {scroll}>
               {messageList.map((messageContent) => {
                 return(
                   <div>
@@ -59,7 +61,8 @@ const handleRoomChangeWrapper = (room: string) => {  //Då det bara är här i c
                  
                 );
               })}
-            </ScrollToBottom> 
+              </div>
+            </div>
             <div className="send-div">
               <input className="input-div"
                 type="text" 
@@ -72,7 +75,7 @@ const handleRoomChangeWrapper = (room: string) => {  //Då det bara är här i c
             </div> 
           </div>
         </div>
-      </div>
+      {/* </div> */}
     </div>
   )
 }

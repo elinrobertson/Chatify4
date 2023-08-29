@@ -12,17 +12,17 @@
     justify-content: center;
 }
 
-.wrapper {
+/* .wrapper {
     box-shadow: 11px 15px 30px 5px rgba(117, 117, 117, 1);
-}
+} */
 
 .chat-container {
     width: 50rem;
     height: 25rem;
-    /* background-color: rgb(104, 104, 233); */
-    /* border: 1px solid orange; */
+    box-shadow: 11px 15px 30px 5px rgba(117, 117, 117, 1);
     display: flex;
-    justify-content: center;    /*alignment along the main axis */  
+    border-radius: 15px;
+    justify-content: center;
 }
 
 .room-div{
@@ -52,6 +52,7 @@
     width: 75%;
     height: 25rem;
     display: flex;
+    /* position: relative; för att få send-div att hamna rätt */
     flex-direction: column;
     padding: 10px;
     border-top-right-radius: 15px;
@@ -107,7 +108,11 @@ chatbubblor
 
 .send-div {
     display: flex;
-    align-items: flex-end;
+    /* position: absolute; för att få send-div att hamna rätt
+    bottom: 0;
+    left:0; */
+    /* width: 400px; */
+    /* align-items: flex-end; */
     /* border: 1px solid red; */
     padding: 0.2rem;
     justify-content: space-around;
@@ -185,7 +190,6 @@ chatbubblor
     cursor: pointer;
     outline: none;
     margin: 5px;
-    margin-left: 22px;
     letter-spacing: 2px;
 
 }
