@@ -9,6 +9,8 @@ interface IMessage {
     time: string
 }
 
+//ny kommentar
+
 interface ISocketContext {
     isLoggedIn: boolean
     username: string
