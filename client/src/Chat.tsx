@@ -1,10 +1,12 @@
 import { useSocket } from './SocketContext';
 import { useState } from 'react';
+import ScrollToBottom from "react-scroll-to-bottom";
 import "./Chat.css"
+
 
 function Chat() {
 
-  const { room, username, handleRoomChange, roomList, currentMessage, setCurrentMessage, sendMessage, messageList, setMessageList } = useSocket(); // roomList
+  const { room, username, handleRoomChange, roomList, currentMessage, setCurrentMessage, sendMessage, messageList } = useSocket(); 
 
   // Håll ett separat tillstånd för input-värdet
   const [inputRoom, setInputRoom] = useState('');
@@ -39,23 +41,25 @@ const handleRoomChangeWrapper = (room: string) => {  //Då det bara är här i c
          
           <div className="chatwindow-div">
             <p>Du är i {room}</p>
-            <div className="message-div">
+            <ScrollToBottom className="message-div">
               {messageList.map((messageContent) => {
                 return(
-                  <div className="message" id={username === messageContent.author ? "you" : "other"}>
-                    <div>
-                      <div className="message-content">
-                        <p>{messageContent.message}</p>
-                      </div>
-                      <div className="message-meta">
+                  <div>
+                    <div className="message" id={username === messageContent.author ? "my-messages" : "other-messages"}>
+                        <div className="message-content">
+                          <p>{messageContent.message}</p>
+                        </div>
+                        <div className="message-meta">
                         <p id="time">{messageContent.time}</p>
                         <p id="author">{messageContent.author}</p>
                       </div>
                     </div>
+                      
                   </div>
+                 
                 );
               })}
-            </div>
+            </ScrollToBottom> 
             <div className="send-div">
               <input className="input-div"
                 type="text" 
