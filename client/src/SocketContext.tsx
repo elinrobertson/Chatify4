@@ -87,6 +87,7 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
             console.log("user disconnected")
         });
     },[socket])
+    
 
     useEffect(() => {
         socket.on("receive_message", (data) => {
@@ -108,11 +109,13 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
         if (room) {
             console.log(`Joined room: ${room}`);
             socket.emit("join_room", { room, username });
+            
         }
     }
     
 
     const handleRoomChange = (newRoom: string) => {
+        setMessageList([]);
         // Save the previous room value before updating the state
         setPreviousRoom(room);
         // Update the state with the new room value
