@@ -41,7 +41,7 @@ const handleRoomChangeWrapper = (room: string) => {  //Då det bara är här i c
           </div>  
          
           <div className="chatwindow-div">
-            <p>Du är i {room}</p>
+            <p className='room-name'>{room}</p>
             <div className="message-div">
               <div ref= {scroll}>
               {messageList.map((messageContent) => {
