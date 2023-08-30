@@ -48,7 +48,6 @@
 }
 .chatwindow-div {
     background-color: white;
-    /* border: 1px solid black; */
     width: 75%;
     height: 25rem;
     display: flex;
@@ -58,6 +57,11 @@
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
     /* margin-left: 2rem; */
+}
+
+.message-div {
+    height: 80%;
+    overflow-y: scroll;
 }
 
 /* .messages {
@@ -108,6 +112,7 @@ chatbubblor
 
 .send-div {
     display: flex;
+    height: 20%;
     /* position: absolute; för att få send-div att hamna rätt
     bottom: 0;
     left:0; */
@@ -125,6 +130,7 @@ chatbubblor
     display: flex;
     align-content: center;
     align-items: center;
+    margin-top: auto;
 }
 
 .send-div input {
@@ -136,6 +142,7 @@ chatbubblor
     background: none;
     outline: none;
     font-size: 16px;
+    
 }
 
 .send-btn {

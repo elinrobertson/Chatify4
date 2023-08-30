@@ -100,7 +100,7 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     },[socket]);
 
     useEffect(() => {
-        scroll.current?.scrollIntoView({})
+        scroll.current?.scrollIntoView(false)
     }, [messageList])
 
 
