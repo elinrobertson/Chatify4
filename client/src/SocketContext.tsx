@@ -30,12 +30,12 @@ interface ISocketContext {
     currentMessage: string
     setCurrentMessage: React.Dispatch<React.SetStateAction<string>>
     sendMessage: () => void
-    isSending: boolean
-    setIsSending: React.Dispatch<React.SetStateAction<boolean>>
     isTyping: boolean
-    setIsTyping: React.Dispatch<React.SetStateAction<boolean>>
-    handleTyping: () => void
+    userWhoIsTyping: string
+
 }
+
+
 
 const defaultValues = {
     isLoggedIn: false,
@@ -55,12 +55,11 @@ const defaultValues = {
     currentMessage: "",
     setCurrentMessage: () => { },
     sendMessage: () => { },
-    handleTyping: () => { },
-    isSending:false,
-    setIsSending:() => { },
     isTyping: true,
-    setIsTyping: () => { },
+    userWhoIsTyping:"",
+    
 }
+
 
 const SocketContext = createContext<ISocketContext>(defaultValues)
 // eslint-disable-next-line react-refresh/only-export-components
@@ -77,6 +76,8 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     const [previousRoom, setPreviousRoom] = useState("");
     const [messageList, setMessageList] = useState<IMessage[]>([]);
     const [currentMessage, setCurrentMessage] = useState("");
+    const [isTyping, setIsTyping] = useState(false);
+    const [userWhoIsTyping, setUserWhoIsTyping] = useState("");
 
 
 
@@ -109,6 +110,11 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     },[socket]);
 
 
+    useEffect(() => {
+      socket.emit("is_typing", { room, username, isTyping: !!currentMessage })
+    },[currentMessage]);
+
+
     const login = () => {
         socket.connect()
         socket.emit("init_chat")  
@@ -138,6 +144,66 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     };
 
     
+
+    //  const handleTyping = (username, isTyping) => {
+    //     socket.emit("user_is_typing")
+    //  }  
+    
+    // Lyssna på "is_typing"-eventet från servern
+    socket.on("user_is_typing", ({ username, isTyping }) => {
+        setIsTyping(isTyping);
+        setUserWhoIsTyping(username);
+    });
+    
+    // useEffect(() => {
+    //     // Lyssna på "user_is_typing"-eventet från servern
+    //     socket.on("user_is_typing", ({ username, isTyping }) => {
+    //       console.log(`Användare ${username} är skriverstatus: ${isTyping}`);
+          
+    //       // Uppdatera staten för isTyping och userWhoIsTyping
+    //       setIsTyping(isTyping);
+    //       setUserWhoIsTyping(username);
+    //     });
+      
+    //     // Återställ isTyping och userWhoIsTyping när komponenten unmounts eller när du inte längre lyssnar
+    //     return () => {
+    //       setIsTyping(false);
+    //       setUserWhoIsTyping("");
+    //     };
+    //   }, []); // Använd en tom beroendelista för att effekten ska köras en gång
+      
+    //   // ...
+      
+    //   // I din return-funktion
+    //   {userWhoIsTyping && isTyping && (
+    //     <p>{userWhoIsTyping} skriver...</p>
+    // )}
+      
+
+    const sendMessage = async () => {
+        if (currentMessage.trim() !== "") {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+    
+            const formattedHours = hours.toString().padStart(2, '0');
+            const formattedMinutes = minutes.toString().padStart(2, '0');
+            const formattedTime = `${formattedHours}:${formattedMinutes}`;
+    
+            const messageData = {
+                id: new Date().getTime(),
+                room: room,
+                author: username,
+                message: currentMessage,
+                time: formattedTime
+            };
+    
+            await socket.emit("send_message", messageData);
+            setMessageList([...messageList, messageData]);
+            setCurrentMessage("");
+        }
+    };
+    
     // const sendMessage = async () => {
     //     if (currentMessage !== "") {
     //       const now = new Date();
@@ -162,50 +228,12 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     //       setCurrentMessage("");
     //     }
     //   };
-
-    const [isTyping, setIsTyping] = useState(false);
-    const [isSending, setIsSending] = useState(false);
-    
-    const handleTyping = (isTyping: boolean) => {
-      setIsTyping(isTyping);
-    };
-    
-    const sendMessage = async () => {
-        if (currentMessage !== "") {
-            const now = new Date();
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-    
-            const formattedHours = hours.toString().padStart(2, '0');
-            const formattedMinutes = minutes.toString().padStart(2, '0');
-            const formattedTime = `${formattedHours}:${formattedMinutes}`;
-    
-            const messageData = {
-                id: new Date().getTime(),
-                room: room,
-                author: username,
-                message: currentMessage,
-                time: formattedTime
-            };
-    
-            // Visar "Skriver..." meddelandet
-            setIsSending(true);
-            setIsTyping(false);
-    
-            await socket.emit("send_message", messageData);
-            setMessageList([...messageList, messageData]);
-            console.log(messageData);
-            setCurrentMessage("");
-            setIsSending(false); // Återställer när meddelandet har skickats
-        }
-    };
-    
     
 
     return(
         <SocketContext.Provider value= {{ isLoggedIn, login, joinRoom, handleRoomChange,sendMessage, 
             username, setUsername, room, setRoom, roomList, setRoomList, userList, setUserList,  
-            messageList, setMessageList, currentMessage, setCurrentMessage, handleTyping, isTyping, setIsTyping, isSending, setIsSending }}>
+            messageList, setMessageList, currentMessage, setCurrentMessage, isTyping, userWhoIsTyping }}>
             {children}
         </SocketContext.Provider>
     )
