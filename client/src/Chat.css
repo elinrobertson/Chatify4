@@ -59,6 +59,16 @@
     /* margin-left: 2rem; */
 }
 
+.room-name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 20px;
+    margin: 4px;
+}
+
 .message-div {
     height: 80%;
     overflow-y: scroll;
