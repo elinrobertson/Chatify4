@@ -52,7 +52,10 @@ io.on("connection", (socket) => {
         }
         io.emit("list_of_rooms", roomList);
     });
-    
+   
+    socket.on("is_typing", ({room, username, isTyping}) => {
+        socket.to(room).emit("user_is_typing", { username, isTyping })
+     })
 });
 
 

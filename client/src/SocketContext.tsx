@@ -3,6 +3,7 @@ import { PropsWithChildren, createContext, useContext, useState, useEffect, useR
 import { io } from "socket.io-client";
 
 interface IMessage {
+    id: number
     room: string
     author: string
     message: string
@@ -28,6 +29,8 @@ interface ISocketContext {
     setCurrentMessage: React.Dispatch<React.SetStateAction<string>>
     sendMessage: () => void
     scroll: React.RefObject<HTMLDivElement> | null;
+    isTyping: boolean
+    userWhoIsTyping: string
 }
 
 const defaultValues = {
@@ -48,7 +51,9 @@ const defaultValues = {
     currentMessage: "",
     setCurrentMessage: () => { },
     sendMessage: () => { },
-    scroll: null, 
+    scroll: null,
+    isTyping: true,
+    userWhoIsTyping: "", 
 }
 
 const SocketContext = createContext<ISocketContext>(defaultValues)
@@ -67,6 +72,8 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     const [messageList, setMessageList] = useState<IMessage[]>([]);
     const [currentMessage, setCurrentMessage] = useState("");
     const scroll = useRef<HTMLDivElement | null>(null);
+    const [isTyping, setIsTyping] = useState(false);
+    const [userWhoIsTyping, setUserWhoIsTyping] = useState("");
     
 
 
@@ -90,18 +97,27 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
         socket.on("user_disconnected", () => {
             console.log("user disconnected")
         });
-    },[socket])
-    
 
-    useEffect(() => {
         socket.on("receive_message", (data) => {
             setMessageList((list) => [...list, data]);
         });
-    },[socket]);
 
+        // socket.on("user_is_typing", ({ username, isTyping }) => {
+        //     setIsTyping(isTyping);
+        //     setUserWhoIsTyping(username);
+        // });
+
+    },[socket])
+    
+
+   
     useEffect(() => {
         scroll.current?.scrollIntoView(false)
     }, [messageList])
+
+    useEffect(() => {
+        socket.emit("is_typing", { room, username, isTyping: !!currentMessage })
+      },[currentMessage]);
 
 
     const login = () => {
@@ -132,6 +148,13 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
         socket.emit("join_room", { previousRoom, room, username });
     };
 
+
+    // Lyssna på "is_typing"-eventet från servern
+    socket.on("user_is_typing", ({ username, isTyping }) => {
+        setIsTyping(isTyping);
+        setUserWhoIsTyping(username);
+    });
+
     
     const sendMessage = async () => {
         if (currentMessage !== "") {
@@ -144,6 +167,7 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
             const formattedTime = `${formattedHours}:${formattedMinutes}`;
     
             const messageData = {
+                id: new Date().getTime(),
                 room: room,
                 author: username,
                 message: currentMessage,
@@ -154,6 +178,8 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
             setMessageList([...messageList, messageData]);
             console.log(messageData);
             setCurrentMessage("");
+            // Sätta om state för setIsTyping och setUserWhoIsTyping?
+           
         }
     };
     
@@ -161,7 +187,7 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     return(
         <SocketContext.Provider value= {{ isLoggedIn, login, joinRoom, handleRoomChange,sendMessage, 
             username, setUsername, room, setRoom, roomList, setRoomList, userList, setUserList,  
-            messageList, setMessageList, currentMessage, setCurrentMessage, scroll }}>
+            messageList, setMessageList, currentMessage, setCurrentMessage, scroll, isTyping, userWhoIsTyping }}>
             {children}
         </SocketContext.Provider>
     )
