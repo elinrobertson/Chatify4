@@ -4,27 +4,19 @@ import "./Chat.css"
 
 
 function Chat() {
-
-  
-
-  const { userWhoIsTyping, room, username, handleRoomChange, roomList, currentMessage, setCurrentMessage, sendMessage, messageList, scroll, isTyping } = useSocket(); 
-
-  // Håll ett separat tillstånd för input-värdet
+  const { userWhoIsTyping, room, username, handleRoomChange, roomList, currentMessage, 
+          setCurrentMessage, sendMessage, messageList, scroll, isTyping } = useSocket(); 
   const [inputRoom, setInputRoom] = useState('');
+  const roomNames = Object.keys(roomList); 
 
-  const roomNames = Object.keys(roomList); //Då det är ett objekt vi tar emot från servern gör vi om det till Object.keys
-
-const handleRoomChangeWrapper = (room: string) => {  //Då det bara är här i chat komponenten vi behöver denna funktion så behöver vi inte lägga in detta i contexten detta är inget vi behöver skicka till servern
+  const handleRoomChangeWrapper = (room: string) => { 
     handleRoomChange(room)
     setInputRoom("");
 }
 
 
-
-
   return (
     <div className="main">
-      {/* <div className="wrapper"> */}
         <div className="chat-container">
           <div className="room-div">
             <h3>Rum</h3>
@@ -35,23 +27,26 @@ const handleRoomChangeWrapper = (room: string) => {  //Då det bara är här i c
                   </li>
                 ))}
               </ul>
-              {/* <ul>{roomlist}</ul> */}
               <div className='room_input-div'>
-                <input value={ inputRoom } onChange={(e) => setInputRoom(e.target.value)} type="text" placeholder="Rum"/>
+                <input 
+                  value={ inputRoom } 
+                  onChange={(e) => 
+                  setInputRoom(e.target.value)} 
+                  type="text" 
+                  placeholder="Välj namn..."
+                />
                 <button onClick={() => handleRoomChangeWrapper(inputRoom)}className="create-room-btn">Skapa rum</button>
               </div>
           </div>  
-         
           <div className="chatwindow-div">
             <p className='room-name'>{room}</p>
-
             <div className="message-div">
               <div ref= {scroll}>
                 {messageList.map((messageContent) => {
+                  
+                  
                   return(
-                  //vet inte om raden under behövs eller inte, kanske bara ska vara en tom div
                     <div> 
-                      {/* key={messageContent.id} */}
                       <div className="message" id={username === messageContent.author ? "my-messages" : "other-messages"}>
                         <div className="message-content">
                           <p>{messageContent.message}</p>
@@ -60,33 +55,26 @@ const handleRoomChangeWrapper = (room: string) => {  //Då det bara är här i c
                           <p id="time">{messageContent.time}</p>
                           <p id="author">{messageContent.author}</p>
                         </div>
-
-                        
                       </div>
                     </div>
                   );
                })}
-             
               </div>
-              <div className='is-typing'>{isTyping && userWhoIsTyping !== username ? (
-                          <p>{userWhoIsTyping} skriver...</p> 
-                          ) : null}
-                </div>
             </div>
-            
+              <div className='is-typing'>
+                {isTyping && userWhoIsTyping !== username ? (<p>{userWhoIsTyping} skriver...</p>) : null}
+              </div>
             <div className="send-div">
               <input className="input-div"
                 type="text" 
                 value={currentMessage} 
                 placeholder="Skriv ditt meddelande..." 
-                onChange={(e) => {
-                  setCurrentMessage(e.target.value)
-                }}/>
+                onChange={(e) => {setCurrentMessage(e.target.value)}}
+              />
               <button onClick={sendMessage} className="send-btn"><i className="fa-solid fa-paper-plane"></i></button>
             </div> 
           </div>
         </div>
-      {/* </div> */}
     </div>
   )
 }
