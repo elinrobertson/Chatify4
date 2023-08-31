@@ -75,9 +75,7 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
     const [isTyping, setIsTyping] = useState(false);
     const [userWhoIsTyping, setUserWhoIsTyping] = useState("");
     
-
-
-
+    
     useEffect (() => {
         if (room) {
             socket.emit("join_room", {previousRoom, room, username,}) 
@@ -86,31 +84,28 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
 
     useEffect(() => {
         socket.on("new_user_joined_chat", (username, room) => {
-            console.log(username, room);
+            //console.log(username, room);
         });
 
         socket.on("list_of_rooms", (roomList) => {
-            console.log(roomList); 
             setRoomList(roomList)
         });
 
         socket.on("user_disconnected", () => {
-            console.log("user disconnected")
+            //console.log("user disconnected")
         });
 
         socket.on("receive_message", (data) => {
             setMessageList((list) => [...list, data]);
         });
 
-        // socket.on("user_is_typing", ({ username, isTyping }) => {
-        //     setIsTyping(isTyping);
-        //     setUserWhoIsTyping(username);
-        // });
-
+        socket.on("user_is_typing", ({ username, isTyping }) => {
+            setIsTyping(isTyping);
+            setUserWhoIsTyping(username);
+        });
     },[socket])
     
 
-   
     useEffect(() => {
         scroll.current?.scrollIntoView(false)
     }, [messageList])
@@ -125,37 +120,23 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
         socket.emit("init_chat")  
         setIsLoggedIn(true)
         setRoom("Lobby")
-        //setUserList för VG
     }
-
 
     const joinRoom = () => {
         if (room) {
-            console.log(`Joined room: ${room}`);
+            //console.log(`Joined room: ${room}`);
             socket.emit("join_room", { room, username });
-            
         }
-    }
+    };
     
-
     const handleRoomChange = (newRoom: string) => {
         setMessageList([]);
-        // Save the previous room value before updating the state
         setPreviousRoom(room);
-        // Update the state with the new room value
         setRoom(newRoom);
         console.log("Previous room " + previousRoom)
         socket.emit("join_room", { previousRoom, room, username });
     };
 
-
-    // Lyssna på "is_typing"-eventet från servern
-    socket.on("user_is_typing", ({ username, isTyping }) => {
-        setIsTyping(isTyping);
-        setUserWhoIsTyping(username);
-    });
-
-    
     const sendMessage = async () => {
         if (currentMessage !== "") {
             const now = new Date();
@@ -178,8 +159,6 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
             setMessageList([...messageList, messageData]);
             console.log(messageData);
             setCurrentMessage("");
-            // Sätta om state för setIsTyping och setUserWhoIsTyping?
-           
         }
     };
     
@@ -191,6 +170,6 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
             {children}
         </SocketContext.Provider>
     )
-}
+};
 
 export default SocketProvider
