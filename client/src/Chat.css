@@ -38,6 +38,30 @@
     border-bottom-left-radius: 15px;
 }
 
+.room-div h3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 20px;
+    margin: 4px;
+    font-weight: 300;
+    color: #949494;
+}
+
+.room-div ul {
+    list-style: none;
+    padding: 2px;
+    margin-left: 1rem;
+    letter-spacing: 1px;
+    color: rgb(72, 71, 71);
+}
+
+.room-div ul:hover {
+    cursor: pointer;
+}
+
 .create-room {
     display: flex;
     justify-content: center;
@@ -67,6 +91,7 @@
     letter-spacing: 2px;
     font-size: 20px;
     margin: 4px;
+    color: #949494;
 }
 
 .message-div {
