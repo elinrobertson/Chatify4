@@ -7,7 +7,7 @@ function Chat() {
 
   
 
-  const { room, username, handleRoomChange, roomList, currentMessage, setCurrentMessage, sendMessage, messageList, scroll, isTyping } = useSocket(); 
+  const { userWhoIsTyping, room, username, handleRoomChange, roomList, currentMessage, setCurrentMessage, sendMessage, messageList, scroll, isTyping } = useSocket(); 
 
   // Håll ett separat tillstånd för input-värdet
   const [inputRoom, setInputRoom] = useState('');
@@ -47,30 +47,33 @@ const handleRoomChangeWrapper = (room: string) => {  //Då det bara är här i c
 
             <div className="message-div">
               <div ref= {scroll}>
-              {messageList.map((messageContent) => {
-                return(
+                {messageList.map((messageContent) => {
+                  return(
                   //vet inte om raden under behövs eller inte, kanske bara ska vara en tom div
-                  <div> 
-                    {/* key={messageContent.id} */}
-                    <div className="message" id={username === messageContent.author ? "my-messages" : "other-messages"}>
+                    <div> 
+                      {/* key={messageContent.id} */}
+                      <div className="message" id={username === messageContent.author ? "my-messages" : "other-messages"}>
                         <div className="message-content">
                           <p>{messageContent.message}</p>
                         </div>
                         <div className="message-meta">
-                        <p id="time">{messageContent.time}</p>
-                        <p id="author">{messageContent.author}</p>
+                          <p id="time">{messageContent.time}</p>
+                          <p id="author">{messageContent.author}</p>
                         </div>
 
                         
+                      </div>
                     </div>
-                          {messageContent.author === username && isTyping ? (
-                            <p>{username} skriver...</p> 
-                            ) : null}
-                  </div>
-                );
-              })}
+                  );
+               })}
+             
               </div>
+              <div className='is-typing'>{isTyping && userWhoIsTyping !== username ? (
+                          <p>{userWhoIsTyping} skriver...</p> 
+                          ) : null}
+                </div>
             </div>
+            
             <div className="send-div">
               <input className="input-div"
                 type="text" 
