@@ -84,7 +84,7 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
 
     useEffect(() => {
         socket.on("new_user_joined_chat", (username, room) => {
-            //console.log(username, room);
+            console.log(username, room);
         });
 
         socket.on("list_of_rooms", (roomList) => {
