@@ -15,7 +15,7 @@
 
 .chat-container {
     width: 50rem;
-    height: 25rem;
+    height: 35rem;
     box-shadow: 11px 15px 30px 5px rgba(117, 117, 117, 1);
     display: flex;
     border-radius: 15px;
@@ -24,7 +24,7 @@
 
 .room-div{
     width: 30rem;
-    height: 25rem;
+    height: 35rem;
     background-color: white;
     display: flex;
     flex-direction: column;
@@ -64,13 +64,13 @@
     align-items: center;
     margin-top: auto;
     height: 3rem;
-    
+
 }
 
 .chatwindow-div {
     background-color: white;
     width: 75%;
-    height: 25rem;
+    height: 35rem;
     display: flex;
     flex-direction: column;
     padding: 10px;
@@ -142,7 +142,6 @@
     padding: 0;
  }
  .is-typing  p {
-
     margin: 0;
     padding: 0;
  }
@@ -193,7 +192,7 @@
     font-weight: 300;
     cursor: pointer;
     outline: none;
-    margin-top: 1.2rem;
+    margin-top: 3.2rem;
     letter-spacing: 2px;
 }
 
