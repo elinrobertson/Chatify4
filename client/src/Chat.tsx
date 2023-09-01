@@ -7,7 +7,6 @@ function Chat() {
   const { userWhoIsTyping, room, username, handleRoomChange, roomList, currentMessage, 
           setCurrentMessage, sendMessage, messageList, scroll, isTyping } = useSocket(); 
   const [inputRoom, setInputRoom] = useState('');
-  // const roomNames = Object.keys(roomList); 
 
   const handleRoomChangeWrapper = (room: string) => { 
     handleRoomChange(room);
