@@ -10,13 +10,13 @@ interface IMessage {
     time: string
 }
 
-// 
 
 interface ISocketContext {
     isLoggedIn: boolean
     username: string
     room: string
-    roomList: string[]
+    //roomList: Record<string, string[]>
+    roomList: any
     userList: string
     setRoom: React.Dispatch<React.SetStateAction<string>>
     setUsername: React.Dispatch<React.SetStateAction<string>>
@@ -124,7 +124,7 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
 
     const login = () => {
         socket.connect()
-        socket.emit("init_chat")  
+        socket.emit("init_chat", username)  
         setIsLoggedIn(true)
         setRoom("Lobby")
     }

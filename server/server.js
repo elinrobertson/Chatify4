@@ -56,20 +56,6 @@ io.on("connection", (socket) => {
 });
 
 
-// function convertMapOfSetsToObjectOfArrays(mapOfSets, sockets) {
-
-//     const objectOfArrays = {};
-
-//     for (const [key, set] of mapOfSets) {
-//         if(!sockets.sockets.has(key)) {        
-//             objectOfArrays[key] = Array.from(set);
-//         }
-        
-//     }
-
-//     return objectOfArrays;
-// }
-
 function convertMapOfSetsToObjectOfArrays(mapOfSets, sockets) {   
     const objectOfArrays = {};   
     for (const [key, set] of mapOfSets) {     
