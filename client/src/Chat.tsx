@@ -99,7 +99,7 @@ function Chat() {
           <div className="message-content">
             {/* Om meddelandet innehåller "/gif", extrahera URL:en och rendera bilden */}
             {messageContent.message.includes("/gif") ? (
-              <img src={messageContent.message.split(" ")[1]} alt="GIF" />
+              <img className="gif-img" src={messageContent.message.split(" ")[1]} alt="GIF" />
             ) : (
               <p>{messageContent.message}</p>
             )}
