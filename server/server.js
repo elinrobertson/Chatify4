@@ -14,14 +14,19 @@ const io = new Server(server, {
 
 app.use(cors());
 
+
+const users = {}; // Ett objekt för att lagra användarnamnen 
+
+
 io.on("connection", (socket) => {
     // console.log("New user connected: ", socket.id);
 
     socket.on("init_chat", (username) => {
+        console.log(username);
+        socket.username = username;
         socket.emit("new_user_joined_chat", username);
-
     });
-
+    
     socket.on("join_room", ({previousRoom, room, username}) => {
         socket.leave(previousRoom);
         socket.join(room);
@@ -44,25 +49,38 @@ io.on("connection", (socket) => {
         }
         io.emit("list_of_rooms", roomList);
     });
-   
+
     socket.on("is_typing", ({room, username, isTyping}) => {
         socket.to(room).emit("user_is_typing", { username, isTyping })
      });
 });
 
 
-function convertMapOfSetsToObjectOfArrays(mapOfSets, sockets) {
+// function convertMapOfSetsToObjectOfArrays(mapOfSets, sockets) {
 
-    const objectOfArrays = {};
+//     const objectOfArrays = {};
 
-    for (const [key, set] of mapOfSets) {
-        if(!sockets.sockets.has(key)) {        
-            objectOfArrays[key] = Array.from(set);
-        }
-    }
+//     for (const [key, set] of mapOfSets) {
+//         if(!sockets.sockets.has(key)) {        
+//             objectOfArrays[key] = Array.from(set);
+//         }
+        
+//     }
 
-    return objectOfArrays;
-}
+//     return objectOfArrays;
+// }
+
+function convertMapOfSetsToObjectOfArrays(mapOfSets, sockets) {   
+    const objectOfArrays = {};   
+    for (const [key, set] of mapOfSets) {     
+        if (!sockets.sockets.has(key)) {       
+            const socketIds = Array.from(set);       
+            const socketUsernames = socketIds.map((socketId) => sockets.sockets.get(socketId).username);
+             objectOfArrays[key] = socketUsernames;
+            }   
+        }   
+        
+return objectOfArrays; }
 
 
 server.listen(3001, () => console.log("Server is up and running"));

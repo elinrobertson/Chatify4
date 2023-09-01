@@ -31,6 +31,9 @@ Now you're up and running! To view it in your browser follow ONE of the steps be
 Open two windows or more. Log in and start chatting. 
 You can chat in the lobby, create a new room and chat there, or join someone elses room. You can only be present in one room at a time. When joining a room you leave the present room. 
 
+# Send randon GIF
+Type '/gif ' (/gif + space) and hit the send button twice to send a random GIF. 
+The first time you click send you will get the url to the randomly selected GIF, and the second time you click the send button you send it. 
+
+
 You must't refresh the page, if you do so you will be disconnected. 
-
-

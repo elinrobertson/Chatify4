@@ -10,6 +10,8 @@ interface IMessage {
     time: string
 }
 
+// 
+
 interface ISocketContext {
     isLoggedIn: boolean
     username: string
@@ -33,6 +35,8 @@ interface ISocketContext {
     userWhoIsTyping: string
 }
 
+//roomList: Record<string, string[]>;
+
 const defaultValues = {
     isLoggedIn: false,
     username: "",
@@ -55,6 +59,7 @@ const defaultValues = {
     isTyping: true,
     userWhoIsTyping: "", 
 }
+
 
 const SocketContext = createContext<ISocketContext>(defaultValues)
 // eslint-disable-next-line react-refresh/only-export-components
@@ -88,6 +93,8 @@ const SocketProvider = ({ children }: PropsWithChildren) => {
         });
 
         socket.on("list_of_rooms", (roomList) => {
+            console.log(roomList);
+            
             setRoomList(roomList)
         });
 

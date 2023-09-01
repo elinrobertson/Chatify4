@@ -52,10 +52,19 @@
     margin-left: 1rem;
     letter-spacing: 1px;
     color: rgb(72, 71, 71);
+    text-transform: uppercase;
+    font-weight: 600;
 }
 
 .room-div ul:hover {
     cursor: pointer;
+}
+
+.user-names  {
+    font-size: 14px;
+    text-transform: capitalize;
+    margin-top: 4px;
+    font-weight: 400;
 }
 
 .create-room {
@@ -64,7 +73,6 @@
     align-items: center;
     margin-top: auto;
     height: 3rem;
-
 }
 
 .chatwindow-div {
